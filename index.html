@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Brooke of Life Church Finance</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1b5e20">
+
+  <!-- MOBILE -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="logo.png" class="logo" alt="Church Logo">
+    <h2>Brooke of Life Church Finance</h2>
+  </div>
+
+  <!-- AUTH -->
+  <div id="auth" class="container">
+    <div class="section">
+      <h3>Login</h3>
+      <input id="email" type="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+      <button onclick="login()">Login</button>
+    </div>
+
+    <div class="section">
+      <h3>Create Account</h3>
+      <input id="signupEmail" type="email" placeholder="Email">
+      <input id="signupPassword" type="password" placeholder="Password">
+      <button onclick="signup()">Sign Up</button>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="container" style="display:none">
+
+    <div class="section">
+      <p id="userRole"></p>
+      <button class="danger" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="cards">
+      <div class="card income">
+        <h4>Total Income</h4>
+        <p>KES <span id="totalIncome">0</span></p>
+      </div>
+
+      <div class="card expense">
+        <h4>Total Expenses</h4>
+        <p>KES <span id="totalExpenses">0</span></p>
+      </div>
+
+      <div class="card balance">
+        <h4>Balance</h4>
+        <p>KES <span id="balance">0</span></p>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="section">
+      <h3>Income vs Expenses</h3>
+      <canvas id="financeChart" height="140"></canvas>
+    </div>
+
+    <!-- ADD TRANSACTION (TREASURER) -->
+    <div id="treasurerSection" class="section" style="display:none">
+      <h3>Add Transaction</h3>
+
+      <select id="txType">
+        <option value="">Select Type</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+
+      <input id="txAmount" type="number" placeholder="Amount">
+      <input id="txCategory" type="text" placeholder="Category">
+      <button onclick="submitTransaction()">Submit for Approval</button>
+    </div>
+
+    <!-- PASTOR APPROVAL -->
+    <div id="pastorSection" class="section" style="display:none">
+      <h3>Pending Approvals</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="approvalTable"></tbody>
+      </table>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="section">
+      <h3>Reports</h3>
+      <input id="reportMonth" type="month">
+      <button onclick="loadReport()">Load Report</button>
+
+      <button class="secondary" onclick="exportExcel()">Export Excel</button>
+      <button class="secondary" onclick="exportPDF()">Export PDF</button>
+    </div>
+
+  </div>
+
+  <!-- LIBRARIES -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- FIREBASE -->
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="app.js"></script>
+
+  <!-- SERVICE WORKER -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+
+/* ================= BASE ================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+}
+
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 16px;
+}
+
+/* ================= HEADER ================= */
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 8px;
+}
+
+h2, h3, h4 {
+  color: #1b5e20;
+  margin-bottom: 8px;
+}
+
+/* ================= INPUTS ================= */
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+input[type="month"],
+input[type="number"],
+input[type="date"] {
+  background: #fff;
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #1b5e20;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+button:hover {
+  background: #2e7d32;
+}
+
+button.danger {
+  background: #c62828;
+}
+
+button.danger:hover {
+  background: #b71c1c;
+}
+
+button.secondary {
+  background: #1565c0;
+}
+
+button.secondary:hover {
+  background: #0d47a1;
+}
+
+button.small {
+  padding: 6px 10px;
+  font-size: 13px;
+  width: auto;
+  margin-right: 4px;
+}
+
+/* ================= SECTIONS ================= */
+
+.card,
+.section {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+/* ================= DASHBOARD ================= */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.card h4 {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.card p {
+  margin-top: 8px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card.income {
+  border-top: 4px solid #2e7d32;
+}
+
+.card.expense {
+  border-top: 4px solid #c62828;
+}
+
+.card.balance {
+  border-top: 4px solid #1565c0;
+}
+
+/* ================= TABLES ================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+th {
+  background: #1b5e20;
+  color: white;
+  padding: 8px;
+  text-align: left;
+}
+
+td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* ================= APPROVAL STATUS ================= */
+
+.status {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.status.pending {
+  color: #f57c00;
+}
+
+.status.approved {
+  color: #2e7d32;
+}
+
+.status.rejected {
+  color: #c62828;
+}
+
+/* ================= AUTH ================= */
+
+#auth {
+  margin-top: 30px;
+}
+
+#userRole {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  button.small {
+    margin-top: 4px;
+  }
+}
