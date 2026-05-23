@@ -14,27 +14,17 @@ const firebaseConfig = {
   projectId: "brooke-of-life-church-finance"
 };
 
-/* ================= INITIALIZE ================= */
+/* ================= INIT ================= */
 
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-/* ================= AUTH ================= */
+auth.useDeviceLanguage?.();
 
-auth.useDeviceLanguage();
+/* ================= OFFLINE SUPPORT ================= */
 
-/* ================= OFFLINE MODE ================= */
-
-(async () => {
-  try {
-    await enableIndexedDbPersistence(db);
-    console.log("✅ Offline support enabled");
-  } catch (err) {
-    if (err.code === "failed-precondition") {
-      console.warn("⚠ Multiple tabs open – offline disabled");
-    } else if (err.code === "unimplemented") {
-      console.warn("⚠ Browser does not support offline mode");
-    }
-  }
-})();
+enableIndexedDbPersistence(db).catch(() => {
+  // silently ignore multi-tab / unsupported browsers
+});

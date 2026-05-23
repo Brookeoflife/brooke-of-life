@@ -1,7 +1,7 @@
 
-const CACHE_NAME = "brooke-of-life-v3";
+const CACHE_NAME = "brooke-of-life-v5";
 
-/* ================= STATIC FILES ================= */
+/* ================= STATIC ASSETS ================= */
 
 const STATIC_ASSETS = [
   "/",
@@ -10,24 +10,20 @@ const STATIC_ASSETS = [
   "/app.js",
   "/firebase.js",
   "/manifest.json",
-  "/logo.png",
-
-  // Firebase SDKs
-  "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js",
-  "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js",
-  "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js",
-
-  // PDF libraries
-  "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"
+  "/logo.png"
 ];
 
 /* ================= INSTALL ================= */
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(STATIC_ASSETS).catch(err => {
+        console.warn("Cache failed for some assets:", err);
+      });
+    })
   );
+
   self.skipWaiting();
 });
 
@@ -38,41 +34,43 @@ self.addEventListener("activate", event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(k => k !== CACHE_NAME)
-          .map(k => caches.delete(k))
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
       )
     )
   );
+
   self.clients.claim();
 });
 
-/* ================= FETCH ================= */
+/* ================= FETCH STRATEGY ================= */
 
 self.addEventListener("fetch", event => {
   const req = event.request;
 
-  // Do NOT cache Firebase API calls
+  // Always bypass Firebase requests (critical fix)
   if (
     req.url.includes("firestore.googleapis.com") ||
-    req.url.includes("firebaseauth.googleapis.com")
+    req.url.includes("firebaseauth.googleapis.com") ||
+    req.url.includes("identitytoolkit.googleapis.com")
   ) {
     return;
   }
 
   event.respondWith(
-    caches.match(req).then(cached => {
-      return (
-        cached ||
-        fetch(req)
-          .then(res => {
-            if (req.method === "GET") {
-              const copy = res.clone();
-              caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
-            }
-            return res;
-          })
-          .catch(() => caches.match("/index.html"))
-      );
-    })
+    fetch(req)
+      .then(res => {
+        // cache only GET requests
+        if (req.method === "GET") {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, clone));
+        }
+        return res;
+      })
+      .catch(() => {
+        return caches.match(req).then(cached => {
+          return cached || caches.match("/index.html");
+        });
+      })
   );
 });
